@@ -48,7 +48,7 @@ app.get("/",(req,res)=>{
 })
 
 // API to save contact form
-app.post("/", async (req, res) => {
+app.post("/contact", async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
     await Contact.create({ name, email,subject,message });
