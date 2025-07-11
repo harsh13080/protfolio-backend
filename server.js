@@ -27,16 +27,16 @@ const contactSchema = new mongoose.Schema({
     
   email: {
     type: String,
-    unique: true,
-    require:true
+
+    required:true
   },
   subject:{
     type:String,
-    require:true
+    required:true
   },
   message:{
     type:String,
-    require:true
+    required:true
 
   } 
 }, { timestamps: true });
@@ -51,12 +51,20 @@ app.get("/",(req,res)=>{
 app.post("/contact", async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
-    await Contact.create({ name, email,subject,message });
-    res.status(201).json({ message: "Message saved successfully!" });
+
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    await Contact.create({ name, email, subject, message });
+    res.status(201).json({ message: "Message send successfully!" });
+
   } catch (err) {
+    console.error("❌ Error saving contact:", err); 
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 const PORT = process.env.PORT || 5000;
 connectDb()
